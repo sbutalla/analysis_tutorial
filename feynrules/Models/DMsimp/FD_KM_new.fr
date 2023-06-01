@@ -1,0 +1,259 @@
+(* ****************************************************************** *)
+(* *****                                                        ***** *)
+(* *****  FeynRules model file: Simplified DM models            ***** *)
+(* *****                        s-channel spin-1 mediator       ***** *)
+(* *****  Author: A. Martini, K. Mawatari        mehdi          ***** *)
+(* *****          J. Wang, C.Zhang (EW)                         ***** *)
+(* *****          B. Zaldivar (lepton)                          ***** *)
+(* *****          B. Fuks (monotop)                             ***** *)
+(* *****                                                        ***** *)
+(* ****************************************************************** *)
+
+
+(* ************************** *)
+(* *****  Information   ***** *)
+(* ************************** *)
+M$ModelName = "DMsimp_s_spin1";
+
+M$Information = {
+ Authors      -> {"A. Martini, K. Mawatari, J. Wang, C. Zhang, B. Zaldivar, B. Fuks"}, 
+ Institutions -> {"Universite catholique de Louvain, LPSC Grenoble, Johnnas Gutenberg University of Mainz, Brookhaven National Laboratory, LAPTh Annecy, LPTHE / UPMC"},
+ Emails       -> {"kentarou.mawatari@lpsc.in2p3.fr","cenzhang@bnl.gov"},
+ URLs         -> "http://feynrules.irmp.ucl.ac.be/wiki/DMsimp/",  
+ References   -> {"O. Mattelaer et al., arXiv:1508.00564",
+                  "M. Backovic et al., arXiv:1508.05327",
+                  "M. Neubert et al., arXiv:1509.05785",
+                  "J. Andrea et al., arXiv:1106.6199"},
+ Version      -> "2.1",
+ Date         -> "2016.10.27"
+};
+
+  (* ************************** *)
+  (* *****  Gauge groups  ***** *)
+  (* ************************** *)
+  M$GaugeGroups = {
+
+    (* Add U(1)D for new gauge boson *)
+    U1X == { Abelian -> True, GaugeBoson -> X, Charge -> QX, CouplingConstant -> ee}
+
+ };
+
+(* ************************** *)
+(* *****  Change  log   ***** *)
+(* ************************** *)
+
+(* 2015.08.24 v1.0 - release version.                                    *)
+(* 2016.06.02 v1.1 - changed the PDG numbers for parton-shower programs. *)
+(* 2016.09.23 v2.0 - included the gammaD-lepton interactions (B.Zaldivar)    *)
+(* 2016.10.27 v2.1 - included the monotop interactions (B. Fuks)         *)
+
+
+(***** Setting for interaction order (as e.g. used by MadGraph 5)  ******)
+
+M$InteractionOrderLimit = {
+ {DMV, 4}
+};
+
+M$InteractionOrderHierarchy = {
+ {QCD, 1}, {DMV, 2}, {QED, 2}
+};
+
+
+(* ************************** *)
+(* *****     Fields     ***** *)
+(* ************************** *)
+M$ClassesDescription = {
+
+
+
+F[7] == { ClassName -> Fd11,
+          SelfConjugate -> True,
+          Mass -> {MFd11, 5},
+          Width -> {WFd1,1.00000000e-05},
+          PDG -> 5000521,
+          TeX -> Subscript[F,d11],
+          FullName -> "Dirac DM" },
+
+
+
+F[9] == { ClassName -> Fd21,
+          SelfConjugate -> True,
+          Mass -> {MFd21, 2},
+          Width -> 0,
+          PDG -> 5000523,
+          TeX -> Subscript[F,d21],
+          FullName -> "Dirac DM" },
+
+  
+
+ (************ Gauge Bosons ***************)
+ V[22] == { ClassName -> Zd,        
+         SelfConjugate -> True,
+         Indices -> {},
+         Mass -> {MZd, 125},
+         Width -> {WZd, 1e-05},
+         PropagatorLabel -> "Zd",
+         PropagatorType -> Sine,
+         PropagatorArrow -> None,
+         PDG -> 1023,
+         FullName -> "Zd" },
+
+
+ V[210] == {
+        ClassName -> Bd,
+        SelfConjugate -> True,
+        Unphysical -> True,
+        Indices -> {},
+        Mass -> 0,
+        Width -> 0,
+        Definitions -> {Bd[mu_] :> cw A[mu] -sw ca Z[mu] + sw sa Zd[mu]}},
+
+
+ V[220] == {ClassName -> Xp,        
+        SelfConjugate -> True,
+        Unphysical -> True,
+        Indices -> {},
+        Mass -> 0,
+        Width -> 0,
+        Definitions -> {Xp[mu_] :> sa Z[mu] + ca Zd[mu]}},
+
+ (* Gauge bosons: Q = -1 *)
+
+
+
+V[61] == {ClassName -> X,
+          SelfConjugate -> True,
+          Definitions -> {X[mu_] -> Eps Eta Xp[mu]},
+          Indices -> {},
+          Mass -> 0,
+          Unphysical -> True}
+
+};
+
+
+
+(* ************************** *)
+(* *****   Parameters   ***** *)
+(* ************************** *)  
+M$Parameters = {
+
+ (*  gVSD == { 
+      ParameterType -> External,
+      InteractionOrder -> {DMV, 1},
+      BlockName -> DMINPUTS,
+      TeX -> Subscript[g,VSD],
+      Description -> "SD-ZD vector coupling",
+      Value -> 0. },   *)
+
+ gVFd11Fd21 == { 
+      ParameterType -> External,
+      InteractionOrder -> {DMV, 1},
+      BlockName -> DMINPUTS,
+      TeX -> Subscript[g,Fd11Fd21],
+      Description -> "Fd11 Fd21 coupling",
+      Value -> 1.42E-01 },   
+ gAFd11Fd21 == { 
+      ParameterType -> External,
+      InteractionOrder -> {DMV, 1},
+      BlockName -> DMINPUTS,
+      TeX -> Subscript[g,Fd11Fd21],
+      Description -> "Fd11 Fd21 coupling",
+      Value -> -1.42E-01 },  
+
+gVFd1 == { 
+      ParameterType -> External,
+      InteractionOrder -> {DMV, 1},
+      BlockName -> DMINPUTS,
+      TeX -> Subscript[g,VFd1],
+      Description -> "Fd1-ZD vector coupling",
+      Value -> -1.42E-01 },         
+
+gAFd1 == { 
+      ParameterType -> External,
+      InteractionOrder -> {DMV, 1},
+      BlockName -> DMINPUTS,
+      TeX -> Subscript[g,AFd1],
+      Description -> "Fd1-ZD axial-vector coupling",
+      Value -> 1.42E-01 },  
+
+
+ MZ0 == {
+     ParameterType -> Internal,
+     Value -> MZ,
+     Description -> "Z mass before mixing"},      
+
+  MX =={
+      ParameterType -> Internal,
+      Value -> MZd,
+      Description -> "X mass before mixing"},
+
+ CapitalDeltaZ =={
+       ParameterType -> Internal,
+       Value -> MX^2/MZ0^2,
+       ParameterName -> DZ,
+       Description -> "Ratio of scales"},
+
+  Thetaa == {
+      TeX -> Subscript[\[Theta], \[Alpha]],
+      ParameterType -> Internal,
+      Value -> ArcTan[-2 sw Eta/(1-sw^2 Eta^2 -CapitalDeltaZ)]/2,
+      ParameterName  -> alp,
+      Description -> "Mixing in the weak sector"},
+
+ sa == {
+      TeX -> Subscript[s, \[Alpha]],
+      ParameterType -> Internal,
+      Value -> Sin[Thetaa],
+      Description -> "Sine of alp"}, 
+
+ ca == {
+      TeX -> Subscript[c, \[Alpha]],
+      ParameterType -> Internal,
+      Value -> Cos[Thetaa],
+      Description -> "Cosine of alp"},
+
+ Eta == {
+      ParameterType -> External,
+      BlockName -> HIDDEN,
+      ParameterName -> eta,
+      Value -> 0.01,
+      Description -> "U(1)X - U(1)Y mixing parameter"}, 
+
+
+  Eps == {
+      ParameterType -> Internal,
+      Value -> (Sqrt[1+4 Eta^2] - 1)/2/Eta,
+      ParameterName -> eps,
+      Description -> "kinetic mixing parameter"}       
+
+
+
+
+};
+
+(* ************************** *)
+(* *****   Lagrangian   ***** *)
+(* ************************** *)
+
+LU1 := 1/4 (del[B[nu], mu] - del[B[mu], nu])^2 - 1/4 (del[X[nu], mu] - del[X[mu], nu])^2 + Eps/2 (del[X[nu], mu] - del[X[mu], nu]) (del[B[nu], mu] - del[B[mu], nu]);
+
+(* L1X := -2ee/cw B[mu]/2 Fd11bar.Ga[mu].Fd11;          (*Y_lR=-2*) *)
+
+L1X := Fd11bar.Ga[mu].(gVFd1 + gAFd1 Ga[5]).Fd11 Zd[mu] + HC[Fd11bar.Ga[mu].(gVFd1 + gAFd1 Ga[5]).Fd11 Zd[mu]];
+
+LqG := gs Ga[mu, s, r] T[a, i, j] uqbar[s, f, i].uq[r, f, j] G[mu, a] +  gs Ga[mu, s, r] T[a, i, j] dqbar[s, f, i].dq[r, f, j] G[mu, a];
+ 
+(* L1Fd11Fd21Zd := -2ee/cw B[mu]/2 Fd11bar.Ga[mu].Fd21 + HC[-2ee/cw B[mu]/2 Fd11bar.Ga[mu].Fd21];           (*Y_LL=-1*) *)
+
+L1Fd11Fd21Zd  := Fd11bar.Ga[mu].(gVFd11Fd21 + gAFd11Fd21 Ga[5]).Fd21 Zd[mu] + HC[Fd11bar.Ga[mu].(gVFd11Fd21 + gAFd11Fd21 Ga[5]).Fd21 Zd[mu]]; 
+
+LBright := -2ee/cw B[mu]/2 lbar.Ga[mu].ProjP.l +           (*Y_lR=-2*)
+4ee/3/cw B[mu]/2 uqbar.Ga[mu].ProjP.uq -       (*Y_uR=4/3*)
+2ee/3/cw B[mu]/2 dqbar.Ga[mu].ProjP.dq;        (*Y_dR=-2/3*)
+ 
+LBleft := -ee/cw B[mu]/2 vlbar.Ga[mu].ProjM.vl -          (*Y_LL=-1*)
+ee/cw B[mu]/2 lbar.Ga[mu].ProjM.l  +           (*Y_LL=-1*)
+ee/3/cw B[mu]/2 uqbar.Ga[mu].ProjM.uq +        (*Y_QL=1/3*)
+ee/3/cw B[mu]/2 dqbar.Ga[mu].ProjM.dq ;        (*Y_QL=1/3*)
+
+L1DM := L1X + L1Fd11Fd21Zd + LqG + LU1 + LBright + LBleft;
